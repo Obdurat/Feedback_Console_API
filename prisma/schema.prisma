@@ -1,13 +1,51 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model TeamMember {
+  id            String     @id @default(uuid())
+  name          String
+  position      String
+  status        String
+  hiringDate    DateTime
+  wave          Int
+
+  teamLead      String
+  teamManager   String
+  manager       String
+  director      String
+
+  feedbacks     Feedback[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Feedback {
+  id          String   @id @default(uuid())
+
+  type        FeedbackType
+
+  category    String
+
+  comment     String
+
+  createdAt   DateTime @default(now())
+
+  memberId    String
+
+  member      TeamMember @relation(
+    fields: [memberId],
+    references: [id]
+  )
+}
+
+enum FeedbackType {
+  POSITIVE
+  IMPROVEMENT
 }
