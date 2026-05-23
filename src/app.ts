@@ -1,6 +1,6 @@
 import express from "express";
 import errorHandler from "./middlewares/errorHandler";
-import router from "./routes/feedback.routes";
+import router from "./routes/team.routes";
 import cors from "cors";
 
 class App {
