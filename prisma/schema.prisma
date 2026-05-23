@@ -22,6 +22,8 @@ model TeamMember {
 
   name String
 
+  employeeCode  String @unique
+
   status String
 
   hiringDate DateTime

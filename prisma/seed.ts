@@ -72,7 +72,7 @@ async function main() {
   const director = await prisma.teamMember.create({
     data: {
       name: "Emma Wilson",
-
+      employeeCode: "EMP001",
       status: "Active",
 
       hiringDate: new Date("2018-01-10"),
@@ -86,7 +86,7 @@ async function main() {
   const manager = await prisma.teamMember.create({
     data: {
       name: "Michael Lee",
-
+      employeeCode: "EMP002",
       status: "Active",
 
       hiringDate: new Date("2019-03-15"),
@@ -102,7 +102,7 @@ async function main() {
   const teamManager = await prisma.teamMember.create({
     data: {
       name: "Sarah Johnson",
-
+      employeeCode: "EMP003",
       status: "Active",
 
       hiringDate: new Date("2020-05-12"),
@@ -118,7 +118,7 @@ async function main() {
   const teamLead = await prisma.teamMember.create({
     data: {
       name: "Anderson Rodrigues",
-
+      employeeCode: "EMP004",
       status: "Active",
 
       hiringDate: new Date("2021-08-22"),
@@ -157,7 +157,7 @@ async function main() {
     const agent = await prisma.teamMember.create({
       data: {
         name,
-
+        employeeCode: `EMP${(index + 5).toString().padStart(3, "0")}`,
         status: index % 4 === 0 ? "Inactive" : "Active",
 
         hiringDate: new Date(2023, index % 12, (index + 1) * 2),
