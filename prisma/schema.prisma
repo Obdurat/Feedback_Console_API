@@ -9,10 +9,13 @@ datasource db {
 
 model TeamMember {
   id            String     @id @default(uuid())
+
   name          String
   position      String
   status        String
+
   hiringDate    DateTime
+
   wave          Int
 
   teamLead      String
@@ -27,7 +30,7 @@ model TeamMember {
 }
 
 model Feedback {
-  id          String   @id @default(uuid())
+  id          String @id @default(uuid())
 
   type        FeedbackType
 
@@ -39,10 +42,7 @@ model Feedback {
 
   memberId    String
 
-  member      TeamMember @relation(
-    fields: [memberId],
-    references: [id]
-  )
+  member      TeamMember @relation(fields: [memberId], references: [id])
 }
 
 enum FeedbackType {
