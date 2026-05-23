@@ -18,4 +18,6 @@ router.post(
   controllerWrapper(feedbackController.create),
 );
 
+router.get("/", controllerWrapper(feedbackController.getAll));
+
 export default router;

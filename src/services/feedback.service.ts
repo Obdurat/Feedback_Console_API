@@ -5,16 +5,8 @@ import { CreateFeedbackDTO } from "../schemas/feedback.schema";
 
 class FeedbackService {
   async getAll(params: GetFeedbacksQueryDto) {
-    const {
-      page = 1,
-      limit = 10,
-      memberId,
-      submittedById,
-      type,
-      category,
-      dateFrom,
-      dateTo,
-    } = params;
+    const { memberId, submittedById, type, category, dateFrom, dateTo } =
+      params;
 
     return prisma.feedback.findMany({
       where: {
@@ -31,9 +23,6 @@ class FeedbackService {
           },
         }),
       },
-
-      skip: (page - 1) * limit,
-      take: limit,
 
       orderBy: { createdAt: "desc" },
 

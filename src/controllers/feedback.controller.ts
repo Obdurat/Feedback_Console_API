@@ -12,6 +12,7 @@ class FeedbackController {
 
   async getAll(req: Request, res: Response) {
     const query = getFeedbacksQuerySchema.parse(req.query);
+    console.log("Query:", query);
     const feedbacks = await feedbackService.getAll(query);
     return res.json(feedbacks);
   }
