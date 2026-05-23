@@ -7,42 +7,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Role {
+  id String @id @default(uuid())
+
+  name String @unique
+
+  employees TeamMember[]
+
+  createdAt DateTime @default(now())
+}
+
 model TeamMember {
-  id            String     @id @default(uuid())
+  id String @id @default(uuid())
 
-  name          String
-  position      String
-  status        String
+  name String
 
-  hiringDate    DateTime
+  status String
 
-  wave          Int
+  hiringDate DateTime
 
-  teamLead      String
-  teamManager   String
-  manager       String
-  director      String
+  wave Int
 
-  feedbacks     Feedback[]
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id])
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  reportsToId String?
+  reportsTo   TeamMember? @relation("Hierarchy", fields: [reportsToId], references: [id])
+
+  subordinates TeamMember[] @relation("Hierarchy")
+
+  receivedFeedbacks Feedback[] @relation("FeedbackReceiver")
+
+  submittedFeedbacks Feedback[] @relation("FeedbackSubmitter")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Feedback {
-  id          String @id @default(uuid())
+  id String @id @default(uuid())
 
-  type        FeedbackType
+  type FeedbackType
 
-  category    String
+  category String
 
-  comment     String
+  comment String
 
-  createdAt   DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  memberId    String
+  memberId String
+  member   TeamMember @relation("FeedbackReceiver", fields: [memberId], references: [id])
 
-  member      TeamMember @relation(fields: [memberId], references: [id])
+  submittedById String
+  submittedBy   TeamMember @relation("FeedbackSubmitter", fields: [submittedById], references: [id])
 }
 
 enum FeedbackType {
