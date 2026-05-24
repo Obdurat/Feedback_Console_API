@@ -17,9 +17,10 @@ class App {
   private middleware() {
     this.app.use(express.json());
     this.app.use(cors());
-    this.app.use("/team-members", teamRoutes);
-    this.app.use("/feedbacks", feedbackRoutes);
-    this.app.use("/dashboard", dashboardRoutes);
+    this.app.use("/auth", authRoutes);
+    this.app.use("/team-members", authMiddleware, teamRoutes);
+    this.app.use("/feedbacks", authMiddleware, feedbackRoutes);
+    this.app.use("/dashboard", authMiddleware, dashboardRoutes);
     this.app.use((_req, res) => {
       return res.status(404).json({
         success: false,
