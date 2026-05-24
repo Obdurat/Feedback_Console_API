@@ -1,34 +1,85 @@
 import prisma from "../config/prisma";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import speakeasy from "speakeasy";
+import qrcode from "qrcode";
 import CustomError from "../utils/customError";
 
 class AuthService {
-  async login(employeeCode: string, password: string) {
+  async initLogin(employeeCode: string) {
     const member = await prisma.teamMember.findUnique({
       where: { employeeCode },
       select: {
         id: true,
         name: true,
         employeeCode: true,
-        passwordHash: true,
         status: true,
+        totpEnabled: true,
+        totpSecret: true,
         role: { select: { id: true, name: true } },
-        firstLogin: true,
       },
     });
 
-    if (!member || !member.passwordHash) {
-      throw new CustomError("Invalid credentials", 401);
-    }
-
-    if (member.status === "Inactive") {
+    if (!member) throw new CustomError("Invalid employee code", 401);
+    if (member.status === "Inactive")
       throw new CustomError("Account is inactive", 403);
+
+    // First login — generate secret and return QR code
+    if (!member.totpEnabled) {
+      const secret = speakeasy.generateSecret({
+        name: `Bolt TMS (${member.employeeCode})`,
+      });
+
+      await prisma.teamMember.update({
+        where: { id: member.id },
+        data: { totpSecret: secret.base32 },
+      });
+
+      const qrCodeDataUrl = await qrcode.toDataURL(secret.otpauth_url!);
+
+      return {
+        firstLogin: true,
+        qrCode: qrCodeDataUrl,
+        memberId: member.id,
+      };
     }
 
-    const passwordMatch = await bcrypt.compare(password, member.passwordHash);
-    if (!passwordMatch) {
-      throw new CustomError("Invalid credentials", 401);
+    // Regular login — just signal that TOTP code is needed
+    return {
+      firstLogin: false,
+      memberId: member.id,
+    };
+  }
+
+  async verifyTotp(memberId: string, code: string) {
+    const member = await prisma.teamMember.findUnique({
+      where: { id: memberId },
+      select: {
+        id: true,
+        name: true,
+        employeeCode: true,
+        totpSecret: true,
+        totpEnabled: true,
+        role: { select: { id: true, name: true } },
+      },
+    });
+
+    if (!member?.totpSecret) throw new CustomError("TOTP not set up", 400);
+
+    const isValid = speakeasy.totp.verify({
+      secret: member.totpSecret,
+      encoding: "base32",
+      token: code,
+      window: 1,
+    });
+
+    if (!isValid) throw new CustomError("Invalid or expired code", 401);
+
+    // If this was first login, enable TOTP now
+    if (!member.totpEnabled) {
+      await prisma.teamMember.update({
+        where: { id: member.id },
+        data: { totpEnabled: true },
+      });
     }
 
     const token = jwt.sign(
@@ -37,10 +88,9 @@ class AuthService {
         name: member.name,
         employeeCode: member.employeeCode,
         role: member.role.name,
-        firstLogin: member.firstLogin,
       },
       process.env.JWT_SECRET!,
-      { expiresIn: "8h" }, // shift-length session
+      { expiresIn: "8h" },
     );
 
     return {
@@ -50,20 +100,8 @@ class AuthService {
         name: member.name,
         employeeCode: member.employeeCode,
         role: member.role,
-        firstLogin: member.firstLogin,
       },
     };
-  }
-  async changePassword(id: string, newPassword: string) {
-    const passwordHash = await bcrypt.hash(newPassword, 10);
-
-    await prisma.teamMember.update({
-      where: { id },
-      data: {
-        passwordHash,
-        firstLogin: false, // flip the flag
-      },
-    });
   }
 }
 

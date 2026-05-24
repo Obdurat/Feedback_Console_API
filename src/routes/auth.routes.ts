@@ -1,23 +1,20 @@
 import { Router } from "express";
 import controllerWrapper from "../utils/controllerWrapper";
 import validate from "../middlewares/validate";
-import { changePasswordSchema, loginSchema } from "../schemas/auth.schema";
+import { initLoginSchema, verifyTotpSchema } from "../schemas/auth.schema";
 import authController from "../controllers/auth.controller";
-import { authMiddleware } from "../middlewares/auth.middleware";
 
 const router = Router();
 
 router.post(
-  "/login",
-  validate(loginSchema),
-  controllerWrapper(authController.login),
+  "/init",
+  validate(initLoginSchema),
+  controllerWrapper(authController.initLogin),
 );
-
 router.post(
-  "/change-password",
-  authMiddleware,
-  validate(changePasswordSchema),
-  controllerWrapper(authController.changePassword),
+  "/verify",
+  validate(verifyTotpSchema),
+  controllerWrapper(authController.verifyTotp),
 );
 
 export default router;

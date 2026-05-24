@@ -46,7 +46,8 @@ model TeamMember {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  passwordHash String
+  totpSecret  String?
+  totpEnabled Boolean @default(false)
 }
 
 model Feedback {
