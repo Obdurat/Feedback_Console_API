@@ -66,6 +66,9 @@ model Feedback {
 
   submittedById String
   submittedBy   TeamMember @relation("FeedbackSubmitter", fields: [submittedById], references: [id])
+
+  viewed Boolean @default(false)
+  viewedAt DateTime?
 }
 
 enum FeedbackType {
