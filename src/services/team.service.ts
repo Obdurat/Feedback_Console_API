@@ -117,6 +117,8 @@ class TeamService {
             comment: true,
             createdAt: true,
             submittedBy: { select: { id: true, name: true } },
+            viewed: true,
+            viewedAt: true,
           },
         },
       },

@@ -20,5 +20,6 @@ router.post(
   validate(createFeedbackSchema),
   controllerWrapper(feedbackController.create),
 );
+router.patch("/:id/viewed", controllerWrapper(feedbackController.markAsViewed));
 
 export default router;

@@ -14,6 +14,12 @@ class FeedbackController {
     const feedbacks = await feedbackService.getAll(query);
     return res.json(feedbacks);
   }
-}
 
+  async markAsViewed(req: Request, res: Response) {
+    const feedbackId = req.params.id;
+    console.log(`Marking feedback ${feedbackId} as viewed`); // Debug log
+    const feedback = await feedbackService.markAsViewed(feedbackId as string);
+    return res.json(feedback);
+  }
+}
 export default new FeedbackController();
