@@ -4,7 +4,7 @@ import authService from "../services/auth.service";
 class AuthController {
   async initLogin(req: Request, res: Response) {
     const { employeeCode } = req.body;
-    console.log("Received initLogin request for employeeCode:", employeeCode);
+
     const result = await authService.initLogin(employeeCode);
     return res.json(result);
   }
