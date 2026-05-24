@@ -1,5 +1,5 @@
 app = "bolt-tms-api"
-primary_region = "gru" # São Paulo — closest to you
+primary_region = "gru"
 
 [build]
 
