@@ -16,15 +16,7 @@ class App {
   }
   private middleware() {
     this.app.use(express.json());
-    this.app.use(
-      cors({
-        origin: [
-          "http://localhost:5173",
-          "https://feedback-console-umber.vercel.app/", // add your actual Vercel URL here
-        ],
-        credentials: true,
-      }),
-    );
+    this.app.use(cors({ origin: "*" }));
     this.app.use("/auth", authRoutes);
     this.app.use("/team-members", authMiddleware, teamRoutes);
     this.app.use("/feedbacks", authMiddleware, feedbackRoutes);
