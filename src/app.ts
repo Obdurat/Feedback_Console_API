@@ -2,6 +2,7 @@ import express from "express";
 import errorHandler from "./middlewares/errorHandler";
 import teamRoutes from "./routes/team.routes";
 import feedbackRoutes from "./routes/feedback.routes";
+import dashboardRoutes from "./routes/dashboard.routes";
 import cors from "cors";
 
 class App {
@@ -16,6 +17,7 @@ class App {
     this.app.use(cors());
     this.app.use("/team-members", teamRoutes);
     this.app.use("/feedbacks", feedbackRoutes);
+    this.app.use("/dashboard", dashboardRoutes);
     this.app.use((_req, res) => {
       return res.status(404).json({
         success: false,
