@@ -81,6 +81,8 @@ class TeamService {
             category: true,
             comment: true,
             createdAt: true,
+            viewed: true,
+            viewedAt: true,
 
             submittedBy: {
               select: {
