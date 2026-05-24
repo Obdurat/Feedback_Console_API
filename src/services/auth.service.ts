@@ -14,6 +14,7 @@ class AuthService {
         passwordHash: true,
         status: true,
         role: { select: { id: true, name: true } },
+        firstLogin: true,
       },
     });
 
@@ -36,6 +37,7 @@ class AuthService {
         name: member.name,
         employeeCode: member.employeeCode,
         role: member.role.name,
+        firstLogin: member.firstLogin,
       },
       process.env.JWT_SECRET!,
       { expiresIn: "8h" }, // shift-length session
@@ -48,8 +50,20 @@ class AuthService {
         name: member.name,
         employeeCode: member.employeeCode,
         role: member.role,
+        firstLogin: member.firstLogin,
       },
     };
+  }
+  async changePassword(id: string, newPassword: string) {
+    const passwordHash = await bcrypt.hash(newPassword, 10);
+
+    await prisma.teamMember.update({
+      where: { id },
+      data: {
+        passwordHash,
+        firstLogin: false, // flip the flag
+      },
+    });
   }
 }
 

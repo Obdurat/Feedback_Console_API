@@ -19,6 +19,8 @@ model Role {
 
 model TeamMember {
   id String @id @default(uuid())
+  
+  firstLogin   Boolean @default(true)
 
   name String
 
