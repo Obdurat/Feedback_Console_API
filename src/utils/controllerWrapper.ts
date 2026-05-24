@@ -5,6 +5,7 @@ const controllerWrapper = (func: RequestHandler) => {
     try {
       await func(req, res, next);
     } catch (error) {
+      console.error("Error in controller:", error);
       next(error);
     }
   };

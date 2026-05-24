@@ -39,7 +39,8 @@ class FeedbackService {
   }
 
   async create(data: CreateFeedbackDTO) {
-    return prisma.feedback.create({
+    console.log("Creating feedback with data:", data);
+    const creation = await prisma.feedback.create({
       data: {
         memberId: data.memberId,
 
@@ -68,6 +69,8 @@ class FeedbackService {
         },
       },
     });
+    console.log("1234");
+    return creation;
   }
 }
 

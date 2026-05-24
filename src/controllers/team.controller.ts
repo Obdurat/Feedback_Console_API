@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import teamService from "../services/team.service";
 import { getMembersQuerySchema } from "../schemas/get-members-query.schema";
+import { AuthenticatedRequest } from "../middlewares/auth.middleware";
 
 class TeamController {
   async getAll(req: Request, res: Response) {
@@ -28,6 +29,11 @@ class TeamController {
   async remove(req: Request, res: Response) {
     await teamService.remove(req.params.id as string);
     return res.status(204).send();
+  }
+
+  async getMyFeedbacks(req: AuthenticatedRequest, res: Response) {
+    const result = await teamService.getMyFeedbacks(req.user!.id);
+    return res.json(result);
   }
 }
 

@@ -6,7 +6,7 @@ import { getFeedbacksQuerySchema } from "../dtos/team/get-feedbacks-query.schema
 class FeedbackController {
   async create(req: Request, res: Response) {
     const feedback = await feedbackService.create(req.body);
-
+    console.log("Created feedback:", feedback);
     return res.status(201).json(feedback);
   }
 

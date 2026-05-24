@@ -126,6 +126,29 @@ class TeamService {
     return member;
   }
 
+  async getMyFeedbacks(id: string) {
+    const member = await this.getById(id); // 404 if not found
+    if (!member) throw new CustomError("Member not found", 404);
+
+    const total = member.receivedFeedbacks.length;
+    const positive = member.receivedFeedbacks.filter(
+      (f) => f.type === "POSITIVE",
+    ).length;
+    const improvement = member.receivedFeedbacks.filter(
+      (f) => f.type === "IMPROVEMENT",
+    ).length;
+
+    return {
+      member,
+      stats: {
+        total,
+        positive,
+        improvement,
+        positiveRatio: total > 0 ? Math.round((positive / total) * 100) : 0,
+      },
+    };
+  }
+
   async create(data: CreateTeamMemberDTO) {
     // Validate roleId exists
     const role = await prisma.role.findUnique({ where: { id: data.roleId } });
