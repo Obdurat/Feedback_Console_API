@@ -1,4 +1,5 @@
 import prisma from "../src/config/prisma";
+import bcrypt from "bcrypt";
 
 const feedbackCategories = [
   "Communication",
@@ -24,6 +25,7 @@ const improvementComments = [
 ];
 
 async function main() {
+  const defaultPassword = await bcrypt.hash("bolt2026", 10);
   // Cleanup
   await prisma.feedback.deleteMany();
 
@@ -74,7 +76,7 @@ async function main() {
       name: "Emma Wilson",
       employeeCode: "EMP001",
       status: "Active",
-
+      passwordHash: defaultPassword,
       hiringDate: new Date("2018-01-10"),
 
       wave: 0,
@@ -88,7 +90,7 @@ async function main() {
       name: "Michael Lee",
       employeeCode: "EMP002",
       status: "Active",
-
+      passwordHash: defaultPassword,
       hiringDate: new Date("2019-03-15"),
 
       wave: 0,
@@ -104,7 +106,7 @@ async function main() {
       name: "Sarah Johnson",
       employeeCode: "EMP003",
       status: "Active",
-
+      passwordHash: defaultPassword,
       hiringDate: new Date("2020-05-12"),
 
       wave: 0,
@@ -120,7 +122,7 @@ async function main() {
       name: "Anderson Rodrigues",
       employeeCode: "EMP004",
       status: "Active",
-
+      passwordHash: defaultPassword,
       hiringDate: new Date("2021-08-22"),
 
       wave: 0,
@@ -167,6 +169,7 @@ async function main() {
         roleId: agentRole.id,
 
         reportsToId: teamLead.id,
+        passwordHash: defaultPassword,
       },
     });
 

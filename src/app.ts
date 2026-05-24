@@ -3,6 +3,8 @@ import errorHandler from "./middlewares/errorHandler";
 import teamRoutes from "./routes/team.routes";
 import feedbackRoutes from "./routes/feedback.routes";
 import dashboardRoutes from "./routes/dashboard.routes";
+import authRoutes from "./routes/auth.routes";
+import { authMiddleware } from "./middlewares/auth.middleware";
 import cors from "cors";
 
 class App {
