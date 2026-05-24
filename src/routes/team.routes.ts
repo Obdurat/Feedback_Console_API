@@ -45,5 +45,10 @@ router.delete(
   requireRole(...MANAGEMENT_ROLES),
   controllerWrapper(teamController.remove),
 );
+router.post(
+  "/:id/reset-totp",
+  requireRole(...MANAGEMENT_ROLES),
+  controllerWrapper(teamController.resetTotp),
+);
 
 export default router;

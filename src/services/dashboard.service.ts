@@ -100,7 +100,9 @@ class DashboardService {
         category: true,
         comment: true,
         createdAt: true,
-        member: { select: { id: true, name: true } },
+        member: {
+          select: { id: true, name: true, role: { select: { name: true } } },
+        },
         submittedBy: { select: { id: true, name: true } },
       },
     });

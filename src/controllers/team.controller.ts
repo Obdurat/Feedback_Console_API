@@ -35,6 +35,11 @@ class TeamController {
     const result = await teamService.getMyFeedbacks(req.user!.id);
     return res.json(result);
   }
+
+  async resetTotp(req: Request, res: Response) {
+    const member = await teamService.resetTotp(req.params.id as string);
+    return res.json(member);
+  }
 }
 
 export default new TeamController();

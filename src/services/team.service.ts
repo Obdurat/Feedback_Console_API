@@ -226,6 +226,23 @@ class TeamService {
 
     await prisma.teamMember.delete({ where: { id } });
   }
+
+  async resetTotp(id: string) {
+    await this.getById(id); // 404 if not found
+
+    return prisma.teamMember.update({
+      where: { id },
+      data: {
+        totpSecret: null,
+        totpEnabled: false,
+      },
+      select: {
+        id: true,
+        name: true,
+        totpEnabled: true,
+      },
+    });
+  }
 }
 
 export default new TeamService();
