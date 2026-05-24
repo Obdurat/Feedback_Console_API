@@ -16,15 +16,14 @@ export const authMiddleware = (
   _res: Response,
   next: NextFunction,
 ) => {
-  const authHeader = req.headers.authorization;
+  const token =
+    req.headers.authorization?.split(" ")[1] || (req.query.token as string);
 
-  if (!authHeader?.startsWith("Bearer ")) {
+  if (!token) {
     return next(
       new CustomError("Missing or invalid authorization header", 401),
     );
   }
-
-  const token = authHeader.split(" ")[1];
 
   try {
     const decoded = jwt.verify(

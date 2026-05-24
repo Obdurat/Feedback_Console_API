@@ -1,6 +1,6 @@
 import prisma from "../config/prisma";
 import { GetFeedbacksQueryDto } from "../dtos/team/get-feedbacks-query.schema";
-
+import sseManager from "../utils/sse";
 import { CreateFeedbackDTO } from "../schemas/feedback.schema";
 
 class FeedbackService {
@@ -69,17 +69,22 @@ class FeedbackService {
       },
     });
 
+    sseManager.broadcast("feedback:created", creation);
+
     return creation;
   }
 
   async markAsViewed(feedbackId: string) {
-    return prisma.feedback.update({
+    const feedback = await prisma.feedback.update({
       where: { id: feedbackId },
       data: {
         viewed: true,
         viewedAt: new Date(),
       },
     });
+
+    sseManager.broadcast("feedback:viewed", feedback);
+    return feedback;
   }
 }
 

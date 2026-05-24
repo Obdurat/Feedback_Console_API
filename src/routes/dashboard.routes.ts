@@ -28,4 +28,6 @@ router.get(
   controllerWrapper(dashboardController.getTopMembersByFeedback),
 );
 
+router.get("/events", controllerWrapper(dashboardController.subscribe));
+
 export default router;
