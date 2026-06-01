@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import speakeasy from "speakeasy";
 import qrcode from "qrcode";
 import CustomError from "../utils/customError";
+import sseManager from "../utils/sse";
 
 class AuthService {
   async initLogin(employeeCode: string) {
@@ -92,6 +93,8 @@ class AuthService {
       process.env.JWT_SECRET!,
       { expiresIn: "8h" },
     );
+
+    sseManager.broadcast("session:kicked", { memberId: member.id });
 
     return {
       token,

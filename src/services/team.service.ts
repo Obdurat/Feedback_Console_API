@@ -56,6 +56,7 @@ class TeamService {
         hiringDate: true,
         wave: true,
         createdAt: true,
+        employeeCode: true,
 
         role: {
           select: {
