@@ -69,6 +69,8 @@ model Feedback {
 
   viewed Boolean @default(false)
   viewedAt DateTime?
+
+  acknowledgedAt DateTime?
 }
 
 enum FeedbackType {

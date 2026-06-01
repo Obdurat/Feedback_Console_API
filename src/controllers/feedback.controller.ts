@@ -21,5 +21,13 @@ class FeedbackController {
     const feedback = await feedbackService.markAsViewed(feedbackId as string);
     return res.json(feedback);
   }
+
+  async acknowledge(req: Request, res: Response) {
+    const feedbackId = req.params.id;
+    console.log(`Acknowledging feedback ${feedbackId}`); // Debug log
+    const feedback = await feedbackService.acknowledge(feedbackId as string);
+    return res.json(feedback);
+  }
 }
+
 export default new FeedbackController();

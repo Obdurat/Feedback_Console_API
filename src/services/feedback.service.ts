@@ -34,6 +34,9 @@ class FeedbackService {
         createdAt: true,
         member: { select: { id: true, name: true } },
         submittedBy: { select: { id: true, name: true } },
+        acknowledgedAt: true,
+        viewed: true,
+        viewedAt: true,
       },
     });
   }
@@ -84,6 +87,16 @@ class FeedbackService {
     });
 
     sseManager.broadcast("feedback:viewed", feedback);
+    return feedback;
+  }
+
+  async acknowledge(feedbackId: string) {
+    const feedback = await prisma.feedback.update({
+      where: { id: feedbackId },
+      data: { acknowledgedAt: new Date() },
+    });
+
+    sseManager.broadcast("feedback:acknowledged", feedback);
     return feedback;
   }
 }

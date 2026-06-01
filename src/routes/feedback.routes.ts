@@ -21,5 +21,9 @@ router.post(
   controllerWrapper(feedbackController.create),
 );
 router.patch("/:id/viewed", controllerWrapper(feedbackController.markAsViewed));
+router.patch(
+  "/:id/acknowledge",
+  controllerWrapper(feedbackController.acknowledge),
+);
 
 export default router;

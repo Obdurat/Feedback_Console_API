@@ -84,6 +84,7 @@ class TeamService {
             createdAt: true,
             viewed: true,
             viewedAt: true,
+            acknowledgedAt: true,
 
             submittedBy: {
               select: {
@@ -122,6 +123,7 @@ class TeamService {
             submittedBy: { select: { id: true, name: true } },
             viewed: true,
             viewedAt: true,
+            acknowledgedAt: true,
           },
         },
       },
