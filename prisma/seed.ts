@@ -1,5 +1,4 @@
 import prisma from "../src/config/prisma";
-import bcrypt from "bcrypt";
 
 const feedbackCategories = [
   "Communication",
